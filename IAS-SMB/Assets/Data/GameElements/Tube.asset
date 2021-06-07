@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79164be7d7bacc946bc1f2fa0d06957b, type: 3}
   m_Name: Tube
   m_EditorClassIdentifier: 
-  name: 
-  tile: {fileID: 0}
-  minSize: {x: 0, y: 0}
-  maxSize: {x: 0, y: 0}
+  tile: {fileID: 11400000, guid: 3614d19c7d8f4e040a6f100cf3e09173, type: 2}
+  sizeSelector: 1
+  fixedSize: {x: 0, y: 0}
+  minSize: {x: 2, y: 1}
+  maxSize: {x: 2, y: 5}

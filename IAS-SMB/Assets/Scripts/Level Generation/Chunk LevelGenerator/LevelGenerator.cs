@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(SeedInitializer))]
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] LevelStyle style;
     [SerializeField] GameElementData platform;
     [SerializeField] GameElementData gap;
+    [SerializeField] GameElementData tube;
     [SerializeField] GameElementData cannon;
 
-    Grid grid;
-    SeedInitializer seedInitializer;
 
     public LevelStyle Style { get => style; set => style = value; }
 
@@ -20,9 +18,13 @@ public class LevelGenerator : MonoBehaviour
 
     public void CreateLevel()
     {
-        seedInitializer = GetComponent<SeedInitializer>();
-        seedInitializer.InitSeed();
-        Debug.Log("Creating level with seed " + seedInitializer.Seed);
+        SeedInitializer seedInitializer;
+        if (TryGetComponent(out seedInitializer))
+        {
+            seedInitializer.InitSeed();
+            Debug.Log("Creating level with seed " + seedInitializer.Seed);
+        }
+        
         int size;
         switch (style.levelSizeSelector)
         {
@@ -42,9 +44,11 @@ public class LevelGenerator : MonoBehaviour
             level[i] = CreateChunk(i);
         }
 
-        //TilemapGenerator tilemapGenerator = new TilemapGenerator();
-        TilemapGenerator tilemapGenerator = GetComponent<TilemapGenerator>();
-        tilemapGenerator.GenerateTilemap(level, -style.chunkSize.x/2, -style.chunkSize.y/2);
+        TilemapGenerator tilemapGenerator;
+        if (TryGetComponent(out tilemapGenerator))
+        {
+            tilemapGenerator.GenerateTilemap(level, -style.chunkSize.x / 2, -style.chunkSize.y / 2);
+        }
     }
 
 
@@ -54,14 +58,14 @@ public class LevelGenerator : MonoBehaviour
         var platformElement = new GameElement(0, style.chunkSize, new Vector2Int(0, 0), platform);
         gameElements.Add(platformElement);
         gameElements.Add(new GameElement(0, style.chunkSize, new Vector2Int(Random.Range(0, style.chunkSize.x), platformElement.rect.height), cannon));
+        gameElements.Add(new GameElement(0, style.chunkSize, new Vector2Int(Random.Range(0, style.chunkSize.x), platformElement.rect.height), tube));
         gameElements.Add(new GameElement(0, style.chunkSize, new Vector2Int(5, 0), gap));
-
 
         Chunk chunk = new RandomChunk(style.chunkSize, gameElements);
         return chunk;
     }
 
-    
+    /*
     public Color[,] GenerateLevel()
     {
         if (style != null)
@@ -120,7 +124,7 @@ public class LevelGenerator : MonoBehaviour
         }
 
     }
-
+    
 
     public TileBase[,] ToTileArray(Color[,] colors)
     {
@@ -147,6 +151,7 @@ public class LevelGenerator : MonoBehaviour
         }
         return level;
     }
+    */
 }
 
 
