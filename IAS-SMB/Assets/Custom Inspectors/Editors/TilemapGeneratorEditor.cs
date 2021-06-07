@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 using UnityEditor;
 
@@ -17,4 +17,4 @@ public class TilemapGeneratorEditor : Editor
             tilemapGen.GenerateTilemap();
         }
     }
-}
+}*/

@@ -1,0 +1,1 @@
+﻿public enum SizeSelector { Fixed, RandomRange };

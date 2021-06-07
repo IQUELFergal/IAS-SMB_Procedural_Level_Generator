@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-// IngredientDrawerUIE
+
 [CustomPropertyDrawer(typeof(ColorToTileBase))]
 public class ColorToTileDrawer : PropertyDrawer
 {

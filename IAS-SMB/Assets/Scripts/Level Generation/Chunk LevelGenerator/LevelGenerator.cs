@@ -3,13 +3,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(SeedInitializer))]
 public class LevelGenerator : MonoBehaviour
 {
     [SerializeField] LevelStyle style;
+    [SerializeField] GameElementData platform;
+    [SerializeField] GameElementData gap;
+    [SerializeField] GameElementData cannon;
 
+    Grid grid;
+    SeedInitializer seedInitializer;
 
     public LevelStyle Style { get => style; set => style = value; }
 
+    public Chunk[] level;
+
+    public void CreateLevel()
+    {
+        seedInitializer = GetComponent<SeedInitializer>();
+        seedInitializer.InitSeed();
+        Debug.Log("Creating level with seed " + seedInitializer.Seed);
+        int size;
+        switch (style.levelSizeSelector)
+        {
+            default:
+                return;
+            case SizeSelector.Fixed:
+                size = style.levelSize;
+                break;
+            case SizeSelector.RandomRange:
+                size = Random.Range(style.minLevelSize, style.maxLevelSize);
+                break;
+        }
+
+        level = new Chunk[size];
+        for (int i = 0; i < level.Length; i++)
+        {
+            level[i] = CreateChunk(i);
+        }
+
+        //TilemapGenerator tilemapGenerator = new TilemapGenerator();
+        TilemapGenerator tilemapGenerator = GetComponent<TilemapGenerator>();
+        tilemapGenerator.GenerateTilemap(level, -style.chunkSize.x/2, -style.chunkSize.y/2);
+    }
+
+
+    public Chunk CreateChunk(int chunkIndex)
+    {
+        List<GameElement> gameElements = new List<GameElement>();
+        var platformElement = new GameElement(0, style.chunkSize, new Vector2Int(0, 0), platform);
+        gameElements.Add(platformElement);
+        gameElements.Add(new GameElement(0, style.chunkSize, new Vector2Int(Random.Range(0, style.chunkSize.x), platformElement.rect.height), cannon));
+        gameElements.Add(new GameElement(0, style.chunkSize, new Vector2Int(5, 0), gap));
+
+
+        Chunk chunk = new RandomChunk(style.chunkSize, gameElements);
+        return chunk;
+    }
+
+    
     public Color[,] GenerateLevel()
     {
         if (style != null)
@@ -18,17 +70,15 @@ public class LevelGenerator : MonoBehaviour
             switch (style.levelSizeSelector)
             {
                 default:
-                    Debug.LogError("No level style found : creating empty level...");
                     return null;
-                case LevelStyle.LevelSizeSelector.Fixed:
+                case SizeSelector.Fixed:
                     size = style.levelSize;
                     break;
-                case LevelStyle.LevelSizeSelector.RandomRange:
-                    size = Random.Range(style.minLevelSize,style.maxLevelSize); 
+                case SizeSelector.RandomRange:
+                    size = Random.Range(style.minLevelSize, style.maxLevelSize);
                     break;
             }
             Color[,] level = new Color[size * style.chunkSize.x, style.chunkSize.y];
-
             for (int i = 0; i < size; i++)
             {
                 int randomIndex = Random.Range(0, style.randomChunkSprites.width / style.chunkSize.x);
@@ -44,7 +94,20 @@ public class LevelGenerator : MonoBehaviour
                         {
                             level[x + style.chunkSize.x * i, y] = style.endChunkSprites.GetPixel(x, y);
                         }
-                        else level[x + style.chunkSize.x * i, y] = style.randomChunkSprites.GetPixel(x + randomIndex * style.chunkSize.x, y);
+                        else
+                        {
+                            switch (style.levelChunkType)
+                            {
+                                default:
+                                    break;
+                                case LevelStyle.LevelChunkType.GenerateRandomChunk:
+
+                                    break;
+                                case LevelStyle.LevelChunkType.UseChunkAtlas:
+                                    level[x + style.chunkSize.x * i, y] = style.randomChunkSprites.GetPixel(x + randomIndex * style.chunkSize.x, y);
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -55,7 +118,7 @@ public class LevelGenerator : MonoBehaviour
             Debug.LogError("No level style found.");
             return null;
         }
-        
+
     }
 
 
@@ -84,5 +147,6 @@ public class LevelGenerator : MonoBehaviour
         }
         return level;
     }
-
 }
+
+

@@ -5,16 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New LevelStyle", menuName = "LevelGenerator/Level Style", order = 1)]
 public class LevelStyle : ScriptableObject
 {
-    public enum LevelSizeSelector { Fixed, RandomRange};
     public enum LevelChunkType { UseChunkAtlas, GenerateRandomChunk}
 
-
-
-
-    public LevelSizeSelector levelSizeSelector;
+    public SizeSelector levelSizeSelector;
+    public int tilemapCount;
     public int levelSize;
     public int minLevelSize;
     public int maxLevelSize;
+
     public Vector2Int chunkSize = Vector2Int.one;
     public LevelChunkType levelChunkType;
 
@@ -64,46 +62,15 @@ public class LevelStyle : ScriptableObject
             if (minLevelSize < 2) minLevelSize = 2;
         }
 
-        
-
-
-
 
         if (minLevelSize > maxLevelSize) maxLevelSize = minLevelSize + 1;
+
 
         updateLibraries();
     }
 
     public void updateLibraries()
     {
-        // A supprimer ===================================================================
-        /*if (startEndChunkSprites != null)
-        {
-            List<Color> colors = new List<Color>();
-            for (int x = 0; x < startEndChunkSprites.width; x++)
-            {
-                for (int y = 0; y < startEndChunkSprites.height; y++)
-                {
-                    Color color = startEndChunkSprites.GetPixel(x, y);
-                    if (!colors.Contains(color))
-                    {
-                        colors.Add(color);
-                    }
-                }
-            }
-            if (startEndChunkTileLibrary == null || startEndChunkTileLibrary.Length != colors.Count) // séparer ca dans un autre if pour garder la valeur des tiles si on augmente le nombre de couleurs
-            {
-                startEndChunkTileLibrary = new ColorToTileBase[colors.Count];
-                for (int i = 0; i < colors.Count; i++)
-                {
-                    startEndChunkTileLibrary[i] = new ColorToTileBase(colors[i]);
-                }
-            }
-        }
-        else startEndChunkTileLibrary = null;*/
-        // jusque ici ===================================================================
-
-
 
         if (startChunkSprites != null)
         {

@@ -7,9 +7,8 @@ public class LevelStyleEditor : Editor
 {
     bool displayStartLibrary = false;
     bool displayRandomLibrary = false;
-    bool displayStartEndLibrary = false;
     bool displayEndLibrary = false;
-    LevelStyle.LevelSizeSelector selector;
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
@@ -27,18 +26,17 @@ public class LevelStyleEditor : Editor
         //Chunk size
         EditorGUILayout.PropertyField(serializedObject.FindProperty("chunkSize"));
 
-
         //Level size
-        ((LevelStyle)target).levelSizeSelector = (LevelStyle.LevelSizeSelector)EditorGUILayout.EnumPopup("Level Size Selector", ((LevelStyle)target).levelSizeSelector);
+        levelStyle.levelSizeSelector = (SizeSelector)EditorGUILayout.EnumPopup("Level Size Selector", levelStyle.levelSizeSelector);
         
-        switch (((LevelStyle)target).levelSizeSelector)
+        switch (levelStyle.levelSizeSelector)
         {
             default:
                 break;
-            case LevelStyle.LevelSizeSelector.Fixed:
+            case SizeSelector.Fixed:
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("levelSize"));
                 break;
-            case LevelStyle.LevelSizeSelector.RandomRange:
+            case SizeSelector.RandomRange:
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("minLevelSize"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("maxLevelSize"));
                 break;
@@ -47,17 +45,17 @@ public class LevelStyleEditor : Editor
         //UseStartEndChunks
         EditorGUILayout.PropertyField(serializedObject.FindProperty("useStartChunks"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("useEndChunks"));
-        if(((LevelStyle)target).randomChunkSprites != null && (((LevelStyle)target).randomChunkSprites.width % ((LevelStyle)target).chunkSize.x != 0 || ((LevelStyle)target).randomChunkSprites.height % ((LevelStyle)target).chunkSize.y != 0))
+        if(levelStyle.randomChunkSprites != null && (levelStyle.randomChunkSprites.width % levelStyle.chunkSize.x != 0 || levelStyle.randomChunkSprites.height % levelStyle.chunkSize.y != 0))
         {
             EditorGUILayout.HelpBox("Random chunks texture size does not match the chunk size given.", MessageType.Error);
             GUILayout.Space(20);
         }
-        else if (((LevelStyle)target).startChunkSprites != null && ((LevelStyle)target).useStartChunks && (((LevelStyle)target).startChunkSprites.width % ((LevelStyle)target).chunkSize.x != 0 || ((LevelStyle)target).startChunkSprites.height % ((LevelStyle)target).chunkSize.y != 0))
+        else if (levelStyle.startChunkSprites != null && levelStyle.useStartChunks && (levelStyle.startChunkSprites.width % levelStyle.chunkSize.x != 0 || levelStyle.startChunkSprites.height % levelStyle.chunkSize.y != 0))
         {
             EditorGUILayout.HelpBox("Start chunks texture size does not match the chunk size given.", MessageType.Error);
             GUILayout.Space(20);
         }
-        else if (((LevelStyle)target).endChunkSprites != null && ((LevelStyle)target).useEndChunks && (((LevelStyle)target).endChunkSprites.width % ((LevelStyle)target).chunkSize.x != 0 || ((LevelStyle)target).endChunkSprites.height % ((LevelStyle)target).chunkSize.y != 0))
+        else if (levelStyle.endChunkSprites != null && levelStyle.useEndChunks && (levelStyle.endChunkSprites.width % levelStyle.chunkSize.x != 0 || levelStyle.endChunkSprites.height % levelStyle.chunkSize.y != 0))
         {
             EditorGUILayout.HelpBox("End chunks texture size does not match the chunk size given.", MessageType.Error);
             GUILayout.Space(20);

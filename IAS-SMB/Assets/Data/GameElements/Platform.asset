@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79164be7d7bacc946bc1f2fa0d06957b, type: 3}
+  m_Name: Platform
+  m_EditorClassIdentifier: 
+  tile: {fileID: 11400000, guid: 1fb00a8021650da4eb0ecfcb2c2b2e92, type: 2}
+  sizeSelector: 1
+  fixedSize: {x: 16, y: 32}
+  minSize: {x: 16, y: 14}
+  maxSize: {x: 16, y: 18}
