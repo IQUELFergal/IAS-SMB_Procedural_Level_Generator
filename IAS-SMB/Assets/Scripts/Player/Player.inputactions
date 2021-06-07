@@ -18,8 +18,8 @@
                     "type": "Button",
                     "id": "0e628998-e414-40a8-9e27-c5eaddb194c0",
                     "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
+                    "processors": "Scale",
+                    "interactions": "Tap(duration=0.2),Hold(duration=0.2)"
                 },
                 {
                     "name": "Enable GodMode",
