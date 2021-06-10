@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class GameElementQuantifier
 {
-    [SerializeField] GameElementData data;
+    [SerializeField] ChunkElementData data;
     [SerializeField] int tilemapIndex;
     [SerializeField] int minQuantity;
     [SerializeField] int maxQuantity;

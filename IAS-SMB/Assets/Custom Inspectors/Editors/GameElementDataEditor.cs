@@ -2,13 +2,13 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(GameElementData))]
+[CustomEditor(typeof(ChunkElementData))]
 public class GameElementDataEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        GameElementData gameElementData = (GameElementData)target;
+        ChunkElementData gameElementData = (ChunkElementData)target;
 
         var centeredStyle = GUI.skin.GetStyle("Label");
         centeredStyle.alignment = TextAnchor.UpperCenter;

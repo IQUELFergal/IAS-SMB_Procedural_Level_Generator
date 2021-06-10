@@ -5,32 +5,54 @@ using UnityEngine.Tilemaps;
 
 public class RandomChunk : Chunk
 {
-    public List<GameElement> gameElements;
-
+    public List<ChunkElement> chunkElements;
+    public int startGroundHeight;
+    public int endGroundHeight;
     
 
     public override void GenerateChunkGrid()
     {
-        foreach (var gameElem in gameElements)
+        foreach (var gameElem in chunkElements)
         {
-            for (int x = gameElem.rect.x; x < gameElem.rect.x + gameElem.rect.width; x++)
+            for (int x = gameElem.Rect.x; x < gameElem.Rect.x + gameElem.Rect.width; x++)
             {
-                for (int y = gameElem.rect.y; y < gameElem.rect.y + gameElem.rect.height; y++)
+                for (int y = gameElem.Rect.y; y < gameElem.Rect.y + gameElem.Rect.height; y++)
                 {
-                    TileGrid[gameElem.tilemapIndex][x, y] = gameElem.data.Tile;
+                    TileGrid[gameElem.TilemapIndex][x, y] = gameElem.Tile;
                 }
             }
         }
     }
 
-    public RandomChunk(Vector2Int size, List<GameElement> list)
+    public RandomChunk(Vector2Int size, int groundHeight, List<ChunkElement> list)
     {
-        gameElements = list;
+        chunkElements = list;
+        Size = size;
+        startGroundHeight = endGroundHeight = groundHeight;
+        int maxIndex = 0;
+        for (int i = 0; i < chunkElements.Count; i++)
+        {
+            if (maxIndex < chunkElements[i].TilemapIndex) maxIndex = chunkElements[i].TilemapIndex;
+        }
+        TilemapCount = maxIndex + 1;
+        TileGrid = new TileBase[TilemapCount][,];
+        for (int i = 0; i < TileGrid.Length; i++)
+        {
+            TileGrid[i] = new TileBase[Size.x, Size.y];
+        }
+        GenerateChunkGrid();
+    }
+
+    public RandomChunk(Vector2Int size, int startGndHeight, int endGndHeight, List<ChunkElement> list)
+    {
+        chunkElements = list;
+        startGroundHeight = startGndHeight;
+        endGroundHeight = endGndHeight;
         Size = size;
         int maxIndex = 0;
-        for (int i = 0; i < gameElements.Count; i++)
+        for (int i = 0; i < chunkElements.Count; i++)
         {
-            if (maxIndex < gameElements[i].tilemapIndex) maxIndex = gameElements[i].tilemapIndex;
+            if (maxIndex < chunkElements[i].TilemapIndex) maxIndex = chunkElements[i].TilemapIndex;
         }
         TilemapCount = maxIndex + 1;
         TileGrid = new TileBase[TilemapCount][,];

@@ -33,7 +33,7 @@ public class TilemapGenerator : MonoBehaviour
             obj.AddComponent<CompositeCollider2D>();
             obj.AddComponent<TilemapCollider2D>();
             obj.GetComponent<TilemapCollider2D>().usedByComposite = true;
-            obj.AddComponent<Rigidbody2D>();
+            //obj.AddComponent<Rigidbody2D>();
             obj.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
             tilemaps[i] = obj.GetComponent<Tilemap>();
         }

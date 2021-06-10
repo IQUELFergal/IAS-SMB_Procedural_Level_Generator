@@ -3,9 +3,9 @@ using UnityEngine.Tilemaps;
 
 public abstract class Chunk
 {
-    Vector2Int size;
+    protected Vector2Int size;
     protected TileBase[][,] tileGrid;
-    private int tilemapCount;
+    protected int tilemapCount;
 
     public TileBase[][,] TileGrid { get => tileGrid; set => tileGrid = value; }
     public int TilemapCount { get => tilemapCount; set => tilemapCount = value; }
