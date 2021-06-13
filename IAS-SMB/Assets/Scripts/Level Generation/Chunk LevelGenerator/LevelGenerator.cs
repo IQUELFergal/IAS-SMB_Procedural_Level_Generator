@@ -98,7 +98,9 @@ public class LevelGenerator : MonoBehaviour
 
         #region Blocks properties
         [SerializeField] TileBase blockTile;
+        [SerializeField] TileBase brickBlockTile;
         [SerializeField] TileBase yellowBlockTile;
+        [SerializeField][Range(0,1)] float yellowBlockProbability;
         [SerializeField] int blockHeightFromPlatform;
         int blockWidth { get => blockWidthSelector == SizeSelector.RandomRange ? Random.Range(blockMinWidth, blockMaxWidth + 1) : blockFixedWidth; }
 
@@ -130,6 +132,12 @@ public class LevelGenerator : MonoBehaviour
         [SerializeField] int enemyMinCount;
         [Min(0)]
         [SerializeField] int enemyMaxCount;
+        #endregion
+
+        #region Structures properties
+        [SerializeField] TileBase playerSpawnerTile;
+        [SerializeField] TileBase endFlagTile;
+        [SerializeField] TileBase endCastleTile;
         #endregion
 
     #endregion
@@ -194,26 +202,36 @@ public class LevelGenerator : MonoBehaviour
     public Chunk CreateChunk(int chunkIndex)
     {
         List<ChunkElement> chunkElements = new List<ChunkElement>();
-        int groundHeight = platformHeight;
-        int startGroundHeight = 0;
         int endGroundHeight = 0;
         List<ChunkElement> platforms = new List<ChunkElement>();
+        List<ChunkElement> structures = new List<ChunkElement>();
 
         if (useStartChunk && chunkIndex == 0)
         {
             //Draw start chunk
-            ChunkElement platform = new ChunkElement(0, platformTile, new Vector2Int(0, 0), new Vector2Int(chunkSize.x, platformHeight));
+            int height = platformHeight;
+            ChunkElement platform = new ChunkElement(0, platformTile, Vector2Int.zero, new Vector2Int(chunkSize.x, height));
             platforms.Add(platform);
             chunkElements.AddRange(platforms);
 
-
+            ChunkElement playerSpawner = new ChunkElement(0, playerSpawnerTile, new Vector2Int(chunkSize.x / 2, height), Vector2Int.one);
+            chunkElements.Add(playerSpawner);
         }
         else if (useEndChunk && chunkIndex == level.Length - 1)
         {
             //Draw end chunk
-            ChunkElement platform = new ChunkElement(0, platformTile, new Vector2Int(0, 0), new Vector2Int(chunkSize.x, platformHeight));
+            int lastChunkHeight = ((RandomChunk)level[level.Length - 2]).endGroundHeight;
+            ChunkElement platform = new ChunkElement(0, platformTile, Vector2Int.zero, new Vector2Int(chunkSize.x, lastChunkHeight));
             platforms.Add(platform);
             chunkElements.AddRange(platforms);
+
+            ChunkElement endFlagBlock = new ChunkElement(0, blockTile, new Vector2Int(chunkSize.x/3, lastChunkHeight), new Vector2Int(1, 1));
+            structures.Add(endFlagBlock);
+            ChunkElement endFlag = new ChunkElement(0, endFlagTile, new Vector2Int(chunkSize.x/3, lastChunkHeight + 1), new Vector2Int(1, 7));
+            structures.Add(endFlag);
+            ChunkElement endCastle = new ChunkElement(0, endCastleTile, new Vector2Int(2 * chunkSize.x / 3, lastChunkHeight), Vector2Int.one);
+            structures.Add(endCastle);
+            chunkElements.AddRange(structures);
         }
         else 
         {
@@ -326,6 +344,7 @@ public class LevelGenerator : MonoBehaviour
 
             #region Create blocks
             List<ChunkElement> blocks = new List<ChunkElement>();
+            List<ChunkElement> yellowBlocks = new List<ChunkElement>();
             if ((numberOfTubes + numberOfCannons - (tubes.Count + cannons.Count)) > 0)
             {
                 int blockHeight = 1;
@@ -333,16 +352,27 @@ public class LevelGenerator : MonoBehaviour
                 {
                     int width = blockWidth;
                     int xPos = Random.Range(1, chunkSize.x - (width + 1));
-                    RectInt blockRect = new RectInt(xPos, GetChunkLocalHeight(xPos, platforms) + blockHeightFromPlatform, width, blockHeight);
-                    ChunkElement blockRow = new ChunkElement(0, blockTile, blockRect);
+                    int yPos = GetChunkLocalHeight(xPos, platforms) + blockHeightFromPlatform;
+                    RectInt blockRect = new RectInt(xPos, yPos, width, blockHeight);
+                    ChunkElement blockRow = new ChunkElement(0, brickBlockTile, blockRect);
+
                     if (!blockRow.isOverlapping(chunkElements) && !blockRow.isOverlapping(blocks))
                     {
                         blocks.Add(blockRow);
                     }
-                    //add randomly placed ?Block inside the blockRow
-                    
+                }
+
+                foreach (var blockRow in blocks)
+                {
+                    if (Random.Range(0f, 1f) < yellowBlockProbability)
+                    {
+                        RectInt yellowBlockRect = new RectInt(Random.Range(blockRow.Rect.x, blockRow.Rect.x + blockRow.Rect.width), blockRow.Rect.y, 1, 1);
+                        ChunkElement yellowBlock = new ChunkElement(0, yellowBlockTile, yellowBlockRect);
+                        yellowBlocks.Add(yellowBlock);
+                    }
                 }
                 chunkElements.AddRange(blocks);
+                chunkElements.AddRange(yellowBlocks);
             }
             #endregion
 
@@ -358,7 +388,7 @@ public class LevelGenerator : MonoBehaviour
                 int xPos = Random.Range(spawnElement.Rect.x, spawnElement.Rect.x + spawnElement.Rect.width);
                 RectInt enemyRect = new RectInt(xPos, spawnElement.Rect.y + spawnElement.Rect.height, 1, 1);
                 ChunkElement enemySpawner = new ChunkElement(0, enemyTiles[Random.Range(0, enemyTiles.Length)], enemyRect);
-                if (!enemySpawner.isOverlapping(enemySpawners))
+                if (!enemySpawner.isOverlapping(enemySpawners) && !enemySpawner.isOverlapping(chunkElements))
                 {
                     enemySpawners.Add(enemySpawner);
                 }
@@ -366,11 +396,10 @@ public class LevelGenerator : MonoBehaviour
             chunkElements.AddRange(enemySpawners);
             #endregion
         }
-
-        startGroundHeight = GetChunkLocalHeight(0, platforms);
+        
         endGroundHeight = GetChunkLocalHeight(chunkSize.x - 1, platforms);
 
-        Chunk chunk = new RandomChunk(chunkSize, startGroundHeight, endGroundHeight, chunkElements);
+        Chunk chunk = new RandomChunk(chunkSize, endGroundHeight, chunkElements);
         return chunk;
     }
     int GetChunkLocalHeight(int xPos, List<ChunkElement> elementList)

@@ -13,6 +13,7 @@ public class LevelGeneratorEditor : Editor
     bool displayBlockSettings;
     bool displayCoinSettings;
     bool displayEnemySettings;
+    bool displayStructuresSettings;
 
     SerializedProperty chunkSize;
     SerializedProperty levelSize;
@@ -51,7 +52,9 @@ public class LevelGeneratorEditor : Editor
     SerializedProperty cannonMaxHeight;
 
     SerializedProperty blockTile;
+    SerializedProperty brickBlockTile;
     SerializedProperty yellowBlockTile;
+    SerializedProperty yellowBlockProbability;
     SerializedProperty blockHeightFromPlatform;
     SerializedProperty blockFixedWidth;
     SerializedProperty blockMinWidth;
@@ -65,6 +68,10 @@ public class LevelGeneratorEditor : Editor
     SerializedProperty enemyFixedCount;
     SerializedProperty enemyMinCount;
     SerializedProperty enemyMaxCount;
+
+    SerializedProperty playerSpawnerTile;
+    SerializedProperty endFlagTile;
+    SerializedProperty endCastleTile;
 
     private void OnEnable()
     {
@@ -107,7 +114,9 @@ public class LevelGeneratorEditor : Editor
         cannonMaxHeight = serializedObject.FindProperty("cannonMaxHeight");
 
         blockTile = serializedObject.FindProperty("blockTile");
+        brickBlockTile = serializedObject.FindProperty("brickBlockTile");
         yellowBlockTile = serializedObject.FindProperty("yellowBlockTile");
+        yellowBlockProbability = serializedObject.FindProperty("yellowBlockProbability");
         blockHeightFromPlatform = serializedObject.FindProperty("blockHeightFromPlatform");
         blockFixedWidth = serializedObject.FindProperty("blockFixedWidth");
         blockMinWidth = serializedObject.FindProperty("blockMinWidth");
@@ -121,6 +130,10 @@ public class LevelGeneratorEditor : Editor
         enemyFixedCount = serializedObject.FindProperty("enemyFixedCount");
         enemyMinCount = serializedObject.FindProperty("enemyMinCount");
         enemyMaxCount = serializedObject.FindProperty("enemyMaxCount");
+
+        playerSpawnerTile = serializedObject.FindProperty("playerSpawnerTile");
+        endFlagTile = serializedObject.FindProperty("endFlagTile");
+        endCastleTile = serializedObject.FindProperty("endCastleTile");
     }
 
     public override void OnInspectorGUI()
@@ -139,7 +152,6 @@ public class LevelGeneratorEditor : Editor
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         GUILayout.Space(10);
-
 
         //Chunk size
         EditorGUILayout.PropertyField(chunkSize);
@@ -290,7 +302,9 @@ public class LevelGeneratorEditor : Editor
         if (displayBlockSettings)
         { 
             EditorGUILayout.PropertyField(blockTile);
+            EditorGUILayout.PropertyField(brickBlockTile);
             EditorGUILayout.PropertyField(yellowBlockTile);
+            EditorGUILayout.PropertyField(yellowBlockProbability);
             EditorGUILayout.PropertyField(blockHeightFromPlatform);
 
             generator.blockWidthSelector = (SizeSelector)EditorGUILayout.EnumPopup("Block Width Selector", generator.blockWidthSelector);
@@ -341,7 +355,17 @@ public class LevelGeneratorEditor : Editor
             }
         }
 
-        GUILayout.Space(20);
+        GUILayout.Space(10);
+
+        displayStructuresSettings = EditorGUILayout.Foldout(displayStructuresSettings, "Structures Settings", EditorStyles.foldoutHeader);
+        if (displayStructuresSettings)
+        {
+            EditorGUILayout.PropertyField(playerSpawnerTile);
+            EditorGUILayout.PropertyField(endFlagTile);
+            EditorGUILayout.PropertyField(endCastleTile);
+        }
+
+        GUILayout.Space(20); 
 
         serializedObject.ApplyModifiedProperties();
 
