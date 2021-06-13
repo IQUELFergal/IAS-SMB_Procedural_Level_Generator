@@ -6,7 +6,7 @@ public class TilemapGenerator : MonoBehaviour
     Grid grid;
     Tilemap[] tilemaps;
 
-    [SerializeField] Tilemap tilemap;
+    //[SerializeField] Tilemap tilemap;
 
    
 

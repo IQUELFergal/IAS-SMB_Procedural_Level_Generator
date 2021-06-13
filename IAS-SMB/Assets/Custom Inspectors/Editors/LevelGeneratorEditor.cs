@@ -62,6 +62,9 @@ public class LevelGeneratorEditor : Editor
 
     SerializedProperty goombaTile;
     SerializedProperty koopaTile;
+    SerializedProperty enemyFixedCount;
+    SerializedProperty enemyMinCount;
+    SerializedProperty enemyMaxCount;
 
     private void OnEnable()
     {
@@ -115,6 +118,9 @@ public class LevelGeneratorEditor : Editor
 
         goombaTile = serializedObject.FindProperty("goombaTile");
         koopaTile = serializedObject.FindProperty("koopaTile");
+        enemyFixedCount = serializedObject.FindProperty("enemyFixedCount");
+        enemyMinCount = serializedObject.FindProperty("enemyMinCount");
+        enemyMaxCount = serializedObject.FindProperty("enemyMaxCount");
     }
 
     public override void OnInspectorGUI()
@@ -319,6 +325,20 @@ public class LevelGeneratorEditor : Editor
         { 
             EditorGUILayout.PropertyField(goombaTile);
             EditorGUILayout.PropertyField(koopaTile);
+            generator.enemyCountSelector = (SizeSelector)EditorGUILayout.EnumPopup("Platform Count Selector", generator.enemyCountSelector);
+
+            switch (generator.enemyCountSelector)
+            {
+                default:
+                    break;
+                case SizeSelector.Fixed:
+                    EditorGUILayout.PropertyField(enemyFixedCount);
+                    break;
+                case SizeSelector.RandomRange:
+                    EditorGUILayout.PropertyField(enemyMinCount);
+                    EditorGUILayout.PropertyField(enemyMaxCount);
+                    break;
+            }
         }
 
         GUILayout.Space(20);

@@ -118,8 +118,18 @@ public class LevelGenerator : MonoBehaviour
         #endregion
 
         #region Enemy properties
+        TileBase[] enemyTiles;
         [SerializeField] TileBase goombaTile;
         [SerializeField] TileBase koopaTile;
+        int enemyCount { get => enemyCountSelector == SizeSelector.RandomRange ? Random.Range(enemyMinCount, enemyMaxCount + 1) : enemyFixedCount; }
+
+        public SizeSelector enemyCountSelector;
+        [Min(0)]
+        [SerializeField] int enemyFixedCount;
+        [Min(0)]
+        [SerializeField] int enemyMinCount;
+        [Min(0)]
+        [SerializeField] int enemyMaxCount;
         #endregion
 
     #endregion
@@ -128,6 +138,13 @@ public class LevelGenerator : MonoBehaviour
     public Chunk[] level;
 
     public RandomChunk rndChk;
+
+    private void SetupEnemyPool()
+    {
+        enemyTiles = new TileBase[2];
+        enemyTiles[0] = goombaTile;
+        enemyTiles[1] = koopaTile;
+    }
 
     public void CreateLevel()
     {
@@ -138,7 +155,8 @@ public class LevelGenerator : MonoBehaviour
             seedInitializer.InitSeed();
             Debug.Log("Creating level with seed " + seedInitializer.Seed);
         }
-        
+
+        SetupEnemyPool();
 
         //Build level 
         int size;
@@ -329,11 +347,23 @@ public class LevelGenerator : MonoBehaviour
             #endregion
 
             #region Create enemies
+            List<ChunkElement> enemySpawners = new List<ChunkElement>();
             List<ChunkElement> spawnableElements = new List<ChunkElement>();
             spawnableElements.AddRange(platforms);
             spawnableElements.AddRange(tubes);
             spawnableElements.AddRange(blocks);
-            ChunkElement spawnElement = spawnableElements[Random.Range(0, spawnableElements.Count)];
+            for (int i = 0; i < enemyCount; i++)
+            {
+                ChunkElement spawnElement = spawnableElements[Random.Range(0, spawnableElements.Count)];
+                int xPos = Random.Range(spawnElement.Rect.x, spawnElement.Rect.x + spawnElement.Rect.width);
+                RectInt enemyRect = new RectInt(xPos, spawnElement.Rect.y + spawnElement.Rect.height, 1, 1);
+                ChunkElement enemySpawner = new ChunkElement(0, enemyTiles[Random.Range(0, enemyTiles.Length)], enemyRect);
+                if (!enemySpawner.isOverlapping(enemySpawners))
+                {
+                    enemySpawners.Add(enemySpawner);
+                }
+            }
+            chunkElements.AddRange(enemySpawners);
             #endregion
         }
 
