@@ -10,6 +10,9 @@ public class LevelGeneratorEditor : Editor
     bool displayTubeSettings;
     bool displayCannonSettings;
     bool displayGapsSettings;
+    bool displayBlockSettings;
+    bool displayCoinSettings;
+    bool displayEnemySettings;
 
     SerializedProperty chunkSize;
     SerializedProperty levelSize;
@@ -47,9 +50,18 @@ public class LevelGeneratorEditor : Editor
     SerializedProperty cannonMinHeight;
     SerializedProperty cannonMaxHeight;
 
+    SerializedProperty blockTile;
+    SerializedProperty yellowBlockTile;
+    SerializedProperty blockHeightFromPlatform;
+    SerializedProperty blockFixedWidth;
+    SerializedProperty blockMinWidth;
+    SerializedProperty blockMaxWidth;
 
-    SerializedProperty test1;
-    SerializedProperty test2;
+    SerializedProperty coinTile;
+    SerializedProperty extraCoinProbability;
+
+    SerializedProperty goombaTile;
+    SerializedProperty koopaTile;
 
     private void OnEnable()
     {
@@ -90,6 +102,19 @@ public class LevelGeneratorEditor : Editor
         cannonFixedHeight = serializedObject.FindProperty("cannonFixedHeight");
         cannonMinHeight = serializedObject.FindProperty("cannonMinHeight");
         cannonMaxHeight = serializedObject.FindProperty("cannonMaxHeight");
+
+        blockTile = serializedObject.FindProperty("blockTile");
+        yellowBlockTile = serializedObject.FindProperty("yellowBlockTile");
+        blockHeightFromPlatform = serializedObject.FindProperty("blockHeightFromPlatform");
+        blockFixedWidth = serializedObject.FindProperty("blockFixedWidth");
+        blockMinWidth = serializedObject.FindProperty("blockMinWidth");
+        blockMaxWidth = serializedObject.FindProperty("blockMaxWidth");
+
+        coinTile = serializedObject.FindProperty("coinTile");
+        extraCoinProbability = serializedObject.FindProperty("extraCoinProbability");
+
+        goombaTile = serializedObject.FindProperty("goombaTile");
+        koopaTile = serializedObject.FindProperty("koopaTile");
     }
 
     public override void OnInspectorGUI()
@@ -251,6 +276,49 @@ public class LevelGeneratorEditor : Editor
                     EditorGUILayout.PropertyField(gapMaxWidth);
                     break;
             }
+        }
+
+        GUILayout.Space(10);
+
+        displayBlockSettings = EditorGUILayout.Foldout(displayBlockSettings, "Block Settings", EditorStyles.foldoutHeader);
+        if (displayBlockSettings)
+        { 
+            EditorGUILayout.PropertyField(blockTile);
+            EditorGUILayout.PropertyField(yellowBlockTile);
+            EditorGUILayout.PropertyField(blockHeightFromPlatform);
+
+            generator.blockWidthSelector = (SizeSelector)EditorGUILayout.EnumPopup("Block Width Selector", generator.blockWidthSelector);
+
+            switch (generator.blockWidthSelector)
+            {
+                default:
+                    break;
+                case SizeSelector.Fixed:
+                    EditorGUILayout.PropertyField(blockFixedWidth);
+                    break;
+                case SizeSelector.RandomRange:
+                    EditorGUILayout.PropertyField(blockMinWidth);
+                    EditorGUILayout.PropertyField(blockMaxWidth);
+                    break;
+            }
+        }
+
+        GUILayout.Space(10);
+
+        displayCoinSettings = EditorGUILayout.Foldout(displayCoinSettings, "Coin Settings", EditorStyles.foldoutHeader);
+        if (displayCoinSettings)
+        { 
+            EditorGUILayout.PropertyField(coinTile);
+            EditorGUILayout.PropertyField(extraCoinProbability);
+        }
+
+        GUILayout.Space(10);
+
+        displayEnemySettings = EditorGUILayout.Foldout(displayEnemySettings, "Enemy Settings", EditorStyles.foldoutHeader);
+        if (displayEnemySettings)
+        { 
+            EditorGUILayout.PropertyField(goombaTile);
+            EditorGUILayout.PropertyField(koopaTile);
         }
 
         GUILayout.Space(20);

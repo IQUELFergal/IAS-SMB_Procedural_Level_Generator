@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] TMP_Text timerText;
     public float timeLeft = 60.0f;
-    private bool isGameOver = false;
+    //private bool isGameOver = false;
     public Canvas gameOverUI;
 
     [SerializeField] TMP_Text scoreText;

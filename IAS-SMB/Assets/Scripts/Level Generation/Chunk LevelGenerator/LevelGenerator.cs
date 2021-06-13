@@ -96,10 +96,32 @@ public class LevelGenerator : MonoBehaviour
         [SerializeField] int cannonMaxHeight;
     #endregion
 
+        #region Blocks properties
+        [SerializeField] TileBase blockTile;
+        [SerializeField] TileBase yellowBlockTile;
+        [SerializeField] int blockHeightFromPlatform;
+        int blockWidth { get => blockWidthSelector == SizeSelector.RandomRange ? Random.Range(blockMinWidth, blockMaxWidth + 1) : blockFixedWidth; }
+
+        public SizeSelector blockWidthSelector;
+        [Min(1)]
+        [SerializeField] int blockFixedWidth;
+        [Min(1)]
+        [SerializeField] int blockMinWidth;
+        [Min(2)]
+        [SerializeField] int blockMaxWidth;
+
+    #endregion
+
         #region Coin properties
+        [SerializeField] TileBase coinTile;
+        [SerializeField][Range(0,1)] float extraCoinProbability;
         #endregion
+
         #region Enemy properties
+        [SerializeField] TileBase goombaTile;
+        [SerializeField] TileBase koopaTile;
         #endregion
+
     #endregion
 
 
@@ -257,14 +279,61 @@ public class LevelGenerator : MonoBehaviour
                     tubes.Add(tube);
                 }
             }
-            Debug.Log(tubeMaxIteration);
             chunkElements.AddRange(tubes);
             #endregion
 
             #region Create coins
+            List<ChunkElement> coins = new List<ChunkElement>();
+            int coinHeight = 1;
+            for (int i = 0; i < gaps.Count; i++)
+            {
+                RectInt coinRect = new RectInt(gaps[i].Rect.x, GetChunkLocalHeight(gaps[i].Rect.x-1, platforms) + 4 , gaps[i].Rect.width, coinHeight);
+                ChunkElement coinRow = new ChunkElement(0, coinTile, coinRect);
+                coins.Add(coinRow);
+                if (Random.Range(0f, 1f) < extraCoinProbability)
+                {
+                    coinRect = new RectInt(gaps[i].Rect.x-1, GetChunkLocalHeight(gaps[i].Rect.x - 1, platforms) + 3, 1, coinHeight);
+                    ChunkElement frontCoin = new ChunkElement(0, coinTile, coinRect);
+                    coins.Add(frontCoin);
+                }
+                if (Random.Range(0f, 1f) < extraCoinProbability)
+                {
+                    coinRect = new RectInt(gaps[i].Rect.x+ gaps[i].Rect.width, GetChunkLocalHeight(gaps[i].Rect.x - 1, platforms) + 3, 1, coinHeight);
+                    ChunkElement backCoin = new ChunkElement(0, coinTile, coinRect);
+                    coins.Add(backCoin);
+                }
+            }
+            chunkElements.AddRange(coins);
+            #endregion
+
+            #region Create blocks
+            List<ChunkElement> blocks = new List<ChunkElement>();
+            if ((numberOfTubes + numberOfCannons - (tubes.Count + cannons.Count)) > 0)
+            {
+                int blockHeight = 1;
+                for (int i = 0; i < 2; i++)
+                {
+                    int width = blockWidth;
+                    int xPos = Random.Range(1, chunkSize.x - (width + 1));
+                    RectInt blockRect = new RectInt(xPos, GetChunkLocalHeight(xPos, platforms) + blockHeightFromPlatform, width, blockHeight);
+                    ChunkElement blockRow = new ChunkElement(0, blockTile, blockRect);
+                    if (!blockRow.isOverlapping(chunkElements) && !blockRow.isOverlapping(blocks))
+                    {
+                        blocks.Add(blockRow);
+                    }
+                    //add randomly placed ?Block inside the blockRow
+                    
+                }
+                chunkElements.AddRange(blocks);
+            }
             #endregion
 
             #region Create enemies
+            List<ChunkElement> spawnableElements = new List<ChunkElement>();
+            spawnableElements.AddRange(platforms);
+            spawnableElements.AddRange(tubes);
+            spawnableElements.AddRange(blocks);
+            ChunkElement spawnElement = spawnableElements[Random.Range(0, spawnableElements.Count)];
             #endregion
         }
 
@@ -316,18 +385,6 @@ public class LevelGenerator : MonoBehaviour
 
 
         if (minLevelSize > maxLevelSize) maxLevelSize = minLevelSize + 1;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (level != null)
-        {
-            for (int i = 0; i < level.Length; i++)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireCube(new Vector3(chunkSize.x * i, 0, 0), new Vector3(chunkSize.x, chunkSize.y, 0));
-            }
-        }
     }
 }
 
