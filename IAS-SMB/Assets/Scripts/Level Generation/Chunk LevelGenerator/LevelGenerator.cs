@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
         #region Platform properties
 
         [SerializeField] TileBase platformTile;
-        [SerializeField] int maxHeightDifference = 3;
+        [SerializeField] int platformMaxHeightDifference = 3;
         int platformCount { get => platformCountSelector == SizeSelector.RandomRange ? Random.Range(platformMinCount, platformMaxCount + 1) : platformFixedCount; }
 
         public SizeSelector platformCountSelector;
@@ -251,10 +251,10 @@ public class LevelGenerator : MonoBehaviour
                     if (i > 0)
                     {
                         //clamp random height between height of the last platform in the same chunk +- maxHeightGap
-                        height = Mathf.Clamp(height, platforms[platforms.Count - 1].Rect.height - maxHeightDifference, platforms[platforms.Count - 1].Rect.height + maxHeightDifference);
+                        height = Mathf.Clamp(height, platforms[platforms.Count - 1].Rect.height - platformMaxHeightDifference, platforms[platforms.Count - 1].Rect.height + platformMaxHeightDifference);
                     }
                     //clamp random height between height of the last platform of the last chunk +- maxHeightGap
-                    else height = Mathf.Clamp(height, ((RandomChunk)level[chunkIndex - 1]).endGroundHeight - maxHeightDifference, ((RandomChunk)level[chunkIndex - 1]).endGroundHeight + maxHeightDifference);
+                    else height = Mathf.Clamp(height, ((RandomChunk)level[chunkIndex - 1]).endGroundHeight - platformMaxHeightDifference, ((RandomChunk)level[chunkIndex - 1]).endGroundHeight + platformMaxHeightDifference);
                 }
                 
 
