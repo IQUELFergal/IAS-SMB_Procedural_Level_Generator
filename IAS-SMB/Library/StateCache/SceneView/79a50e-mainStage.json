@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":100.9678955078125,"y":20.020675659179689,"z":-439.1868896484375},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":70.192626953125,"orthographic":true}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":true,"pivot":{"x":28.2637939453125,"y":-1.5218584537506104,"z":-468.82659912109377},"rotation":{"x":0.0,"y":0.0,"z":0.0,"w":1.0},"size":37.58613586425781,"orthographic":true}
+>>>>>>> feature-procedural-chunk-generation
