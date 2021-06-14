@@ -98,7 +98,7 @@ class Training : MonoBehaviour{
 		return false;
 	}
 
-	public void Compile() {
+	public virtual void Compile() {
 		str_tile = new Dictionary<string, byte>();
 		sample = new byte[width, depth]; 
 		int cnt = this.transform.childCount;

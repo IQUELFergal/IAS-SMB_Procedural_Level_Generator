@@ -24,7 +24,7 @@ class OverlapWFC : MonoBehaviour{
 	public GameObject[,] rendering;
 	public GameObject output;
 	private Transform group;
-    private bool undrawn = true;
+    protected bool undrawn = true;
 
 	public static bool IsPrefabRef(UnityEngine.Object o){
 		#if UNITY_EDITOR
@@ -69,7 +69,7 @@ class OverlapWFC : MonoBehaviour{
 		}
 	}
 
-	public void Generate() {
+	public virtual void Generate() {
 		if (training == null){Debug.Log("Can't Generate: no designated Training component");}
 		if (IsPrefabRef(training.gameObject)){
 			GameObject o = CreatePrefab(training.gameObject, new Vector3(0,99999f,0f), Quaternion.identity);
@@ -119,7 +119,7 @@ class OverlapWFC : MonoBehaviour{
 		return rendering[x,y];
 	}
 
-	public void Draw(){
+	public virtual void Draw(){
 		if (output == null){return;}
 		if (group == null){return;}
         undrawn = false;
