@@ -8,6 +8,8 @@ using UnityEditor;
 [ExecuteInEditMode]
 class OverlapWFC : MonoBehaviour{
 	public Training training = null;
+
+	public Vector3Int tilemapOffset;
 	public int gridsize = 1;
 	public int width = 20;
 	public int depth = 20;
@@ -103,7 +105,7 @@ class OverlapWFC : MonoBehaviour{
 	void OnDrawGizmos(){
 		Gizmos.color = Color.cyan;
 		Gizmos.matrix = transform.localToWorldMatrix;
-		Gizmos.DrawWireCube(new Vector3(width*gridsize/2f-gridsize*0.5f, depth*gridsize/2f-gridsize*0.5f, 0f),
+		Gizmos.DrawWireCube(tilemapOffset + new Vector3(width*gridsize/2f-gridsize*0.5f, depth*gridsize/2f-gridsize*0.5f, 0f),
 							new Vector3(width*gridsize, depth*gridsize, gridsize));
 	}
 

@@ -9,6 +9,7 @@ using UnityEditor;
 
 class TilemapOverlapWFC : OverlapWFC
 {
+	
 	Tilemap outputTilemap;
 	TileBase[,] tilesRendering;
 	public override void Generate()
@@ -45,7 +46,7 @@ class TilemapOverlapWFC : OverlapWFC
 							TileBase tile = training.tiles[v] as TileBase;
 							if (tile != null)
 							{
-								outputTilemap.SetTile(new Vector3Int(x, y, 0), tile);
+								outputTilemap.SetTile(tilemapOffset+new Vector3Int(x, y, 0), tile);
 								tilesRendering[x, y] = tile;
 							}
 						}

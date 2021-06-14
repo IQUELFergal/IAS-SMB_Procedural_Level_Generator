@@ -85,7 +85,7 @@ class TilemapTraining : Training
 		Gizmos.color = Color.magenta;
         if (tilemap !=null)
         {
-			Gizmos.DrawWireCube(tilemap.origin + new Vector3(tilemap.size.x / 2, tilemap.size.y / 2, 0), tilemap.size);
+			Gizmos.DrawWireCube(tilemap.origin + new Vector3(tilemap.size.x / 2 + (tilemap.size.x % 2 == 0 ? 0 : 0.5f), tilemap.size.y / 2 + (tilemap.size.y % 2 == 0 ? 0 : 0.5f), 0), tilemap.size);
 		}
 	}
 }
