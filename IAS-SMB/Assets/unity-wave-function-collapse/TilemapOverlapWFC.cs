@@ -26,6 +26,7 @@ class TilemapOverlapWFC : OverlapWFC
 
 	public override void Draw()
 	{
+		outputTilemap = GetComponent<Tilemap>();
 		if (outputTilemap == null) { return; }
 		//if (group == null) { return; }
 		undrawn = false;
@@ -64,6 +65,7 @@ class TilemapOverlapWFC : OverlapWFC
 	}
 	public void ClearTilemap()
 	{
+		outputTilemap = GetComponent<Tilemap>();
 		outputTilemap.ClearAllTiles();
 	}
 }

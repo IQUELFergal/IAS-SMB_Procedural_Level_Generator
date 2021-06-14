@@ -1,0 +1,21 @@
+<set>
+  <tiles>
+<tile name="Assets/Tiles/Void.asset" symmetry="X" weight="1.0"/>
+<tile name="Assets/Tiles/YellowMountain tile.asset" symmetry="X" weight="1.0"/>
+<tile name="Assets/Tiles/PinkMountain tile.asset" symmetry="X" weight="1.0"/>
+	</tiles>
+<neighbors>  <neighbor left="Assets/Tiles/Void.asset 0" right="Assets/Tiles/YellowMountain tile.asset 0"/>
+  <neighbor left="Assets/Tiles/Void.asset 1" right="Assets/Tiles/Void.asset 1"/>
+  <neighbor left="Assets/Tiles/YellowMountain tile.asset 0" right="Assets/Tiles/Void.asset 0"/>
+  <neighbor left="Assets/Tiles/YellowMountain tile.asset 1" right="Assets/Tiles/YellowMountain tile.asset 1"/>
+  <neighbor left="Assets/Tiles/Void.asset 0" right="Assets/Tiles/Void.asset 0"/>
+  <neighbor left="Assets/Tiles/Void.asset 0" right="Assets/Tiles/PinkMountain tile.asset 0"/>
+  <neighbor left="Assets/Tiles/PinkMountain tile.asset 0" right="Assets/Tiles/PinkMountain tile.asset 0"/>
+  <neighbor left="Assets/Tiles/PinkMountain tile.asset 1" right="Assets/Tiles/PinkMountain tile.asset 1"/>
+  <neighbor left="Assets/Tiles/PinkMountain tile.asset 0" right="Assets/Tiles/YellowMountain tile.asset 0"/>
+  <neighbor left="Assets/Tiles/YellowMountain tile.asset 0" right="Assets/Tiles/YellowMountain tile.asset 0"/>
+  <neighbor left="Assets/Tiles/YellowMountain tile.asset 1" right="Assets/Tiles/Void.asset 1"/>
+  <neighbor left="Assets/Tiles/PinkMountain tile.asset 0" right="Assets/Tiles/Void.asset 0"/>
+  <neighbor left="Assets/Tiles/PinkMountain tile.asset 1" right="Assets/Tiles/Void.asset 1"/>
+	</neighbors>
+</set>
